@@ -24,7 +24,7 @@ ESP8266WebServer webserver(PORT);
 //WiFiServer webserver(PORT);
 
 void setup() {
-  delay(10);
+  delay(100);
   Serial.begin(115200);
   Serial.println();
 
@@ -57,6 +57,9 @@ void setup() {
   webserver.on("/", rootPage);
   webserver.on("/lightUp", lightUp);
   webserver.on("/lightDown", lightDown);
+  webserver.on("/lightBlink", []() {
+    lightBlink(5, 100);
+  });
   webserver.onNotFound(notFoundPage);
 // Routing Ends --------------------------
 
@@ -137,6 +140,22 @@ void lightUp(){
 void lightDown(){
   dbmsg("light down");
   digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+  send_OK();
+}
+
+void lightBlink(int numberOfBlinks, int delayDuration){
+  dbmsg("blink light");
+
+  for (int i = 0; i < numberOfBlinks; i++)
+  {
+    delay(delayDuration);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(delayDuration);
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(delayDuration);
+    digitalWrite(LED_BUILTIN, LOW);
+  }
+
   send_OK();
 }
 
