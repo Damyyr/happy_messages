@@ -1,0 +1,21 @@
+{
+  "name": "server",
+  "version": "0.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "start:debug": "nodemon app.js $env:DEBUG='mqttjs*'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Damyyr",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^3.23.1",
+    "fastify-helmet": "^5.3.2",
+    "mqtt": "^4.2.8"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
