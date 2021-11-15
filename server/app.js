@@ -23,17 +23,21 @@ fastify.get('/api/ping', (req, rep) => {
     rep.send({ msg: 'pong!' })
 })
 
-fastify.post('/api/sendMessage', (req, rep) => {
+fastify.post('/api/test', (req, rep) => {    
+    client.publish('test/blink', '')
+    rep.send({ msg: `test sent!'` })
+})
+
+fastify.post('/api/updateLcd', (req, rep) => {
     const message = req.body['message']
-    const topic = req.body['topic']
     
-    if(!message || !topic){
+    if(!message){
         rep.statusCode = 400
-        throw new Error('You have to specify a topic and a message to send')
+        throw new Error('You have to specify a message to send')
     }
     
-    client.publish(topic, message)
-    rep.send({ msg: `'${message}' message sent!'` })
+    client.publish('update/lcd', message)
+    rep.send({ msg: `'${message}' sent!'` })
 })
 
 fastify.listen(appCreds.port, (err) =>{
