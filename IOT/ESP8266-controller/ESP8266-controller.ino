@@ -96,12 +96,16 @@ void onConnectionEstablished(){
 
   mqttClient.subscribe("#", [](const String & payload) {
     dbmsg(payload);
-    lightBlink(4, 10);
+    lightBlink(4, 5);
   });
 
   mqttClient.subscribe("update/lcd", [](const String & payload) {
     dbmsg(payload);
     setMessage(lcd, payload);
     lightBlink(4, 100);
+  });
+
+  mqttClient.subscribe("test/blink", [](const String & payload) {
+    lightBlink(12, 25);
   });
 }
