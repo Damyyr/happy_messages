@@ -19,11 +19,11 @@ client.on('error', (err) => {
     console.error("Error: ", err)
 })
 
-fastify.get('/ping', (req, rep) => {
+fastify.get('/api/ping', (req, rep) => {
     rep.send({ msg: 'pong!' })
 })
 
-fastify.post('/sendMessage', (req, rep) => {
+fastify.post('/api/sendMessage', (req, rep) => {
     const message = req.body['message']
     const topic = req.body['topic']
     
