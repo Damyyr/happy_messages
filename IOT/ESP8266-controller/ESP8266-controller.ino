@@ -13,12 +13,14 @@
 */
 #define DEBUGGING 1 // Up the debug mode
 
+#define RETRY_BROKER_CONNECTION 5000 // ms
+
 EspMQTTClient mqttClient(
   WIFI_SSID,
   WIFI_PASS,
   MQTT_BROKER_IP,
-  "",
-  "",
+  MQTT_USERNAME,
+  MQTT_PASSWORD,
   "ESP8266-test",
   MQTT_BROKER_PORT
 );
@@ -37,7 +39,7 @@ void setup() {
     Serial.setDebugOutput(false);
   #endif
 
-  mqttClient.setMqttReconnectionAttemptDelay(5);
+  mqttClient.setMqttReconnectionAttemptDelay(RETRY_BROKER_CONNECTION);
   mqttClient.enableDebuggingMessages();
   mqttClient.enableLastWillMessage("hm/lastwill", "Going offline");
 }
