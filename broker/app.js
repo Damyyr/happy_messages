@@ -27,6 +27,25 @@ server.on('error', (err) => {
   console.error('ERROR: ', err)
 })
 
+aedes.on('error', (err) => {
+  console.error(err);
+})
+
+aedes.authenticate = function (client, username, password, callback) {
+  console.log(client.id, 'is tring to connect')
+  callback(null, username, selectPassword(username))
+}
+
+function selectPassword(username){
+  if (username === appCreds.SERVER_MQTT_USERNAME){
+    return appCreds.SERVER_MQTT_PASSWORD
+  } else if (username === appCreds.IOT_MQTT_USERNAME) {
+    return appCreds.IOT_MQTT_PASSWORD
+  } else {
+    return ''
+  }
+}
+
 aedes.on('subscribe', async function (packet, client) {
   console.log('something subscribed')
 })
