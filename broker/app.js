@@ -14,8 +14,10 @@ server.on('connect', () => {
   console.log('connect')
 })
 
-server.on('message', (topic, message) => {
-  console.log(`topic: ${topic} | message: ${message}`)
+aedes.subscribe('#', (payload, deliverfunc, callback) => {
+  const topic = payload.topic
+  const message = payload.payload.toString()
+  console.log(topic, message)
 })
 
 server.on('hm', (topic, message) => {
@@ -33,23 +35,24 @@ aedes.on('error', (err) => {
 
 aedes.authenticate = function (client, username, password, callback) {
   console.log(client.id, 'is tring to connect')
-  callback(null, username, selectPassword(username))
-}
+  // I dunno why, but when I move those condition in its own method to call checkAuth(username, password) : Boolean
+  // it does not work
 
-function selectPassword(username){
-  if (username === appCreds.SERVER_MQTT_USERNAME){
-    return appCreds.SERVER_MQTT_PASSWORD
+  if(username === appCreds.SERVER_MQTT_USERNAME){
+    callback(null, username === appCreds.SERVER_MQTT_USERNAME && password.toString() === appCreds.SERVER_MQTT_PASSWORD)
   } else if (username === appCreds.IOT_MQTT_USERNAME) {
-    return appCreds.IOT_MQTT_PASSWORD
+    callback(null, username === appCreds.IOT_MQTT_USERNAME && password.toString() === appCreds.IOT_MQTT_PASSWORD)
   } else {
-    return ''
+    const error = new Error('Auth error')
+    console.error('Auth Error for', username)
+    callback(error, null)
   }
 }
 
 aedes.on('subscribe', async function (packet, client) {
-  console.log('something subscribed')
+  console.log(client.id, 'subscribed onto', packet[0].topic, ', QOS:', packet[0].qos)
 })
 
 aedes.on('closed', async function (packet, client) {
-  console.log("I lost some guy")
+  console.log("lost", client.id)
 })
